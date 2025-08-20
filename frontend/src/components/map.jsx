@@ -16,6 +16,7 @@ const Map = () => {
   const [position, setPosition] = useState([20.5937, 78.9629]); // Default to India
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
   const markerRef = useRef(null);
 
   useEffect(() => {
@@ -59,8 +60,9 @@ const Map = () => {
 
   const handleSendLocation = async () => {
     if (latitude && longitude) {
-      const weatherData = await fetchWeatherData(latitude, longitude);
-      console.log('Weather Data:', weatherData);
+      const data = await fetchWeatherData(latitude, longitude);
+      setWeatherData(data);
+      console.log('Weather Data:', data);
     }
   };
 
@@ -99,6 +101,17 @@ const Map = () => {
       >
         Send Location Data
       </button>
+
+      {weatherData && (
+        <div className="mt-4 bg-blue-100 p-4 rounded-md border border-blue-300">
+          <h2 className="text-xl font-bold mb-2">Weather Information:</h2>
+          <p className="text-lg">Location: {weatherData.name}</p>
+          <p className="text-lg">Temperature: {(weatherData.main.temp - 273.15).toFixed(2)} °C</p>
+          <p className="text-lg">Description: {weatherData.weather[0].description}</p>
+          <p className="text-lg">Humidity: {weatherData.main.humidity}%</p>
+          <p className="text-lg">Wind Speed: {weatherData.wind.speed} m/s</p>
+        </div>
+      )}
     </div>
   );
 };
