@@ -12,6 +12,7 @@ import Footer from './components/Home/Footer'
 import Interface from './components/Newhome/Interface'
 import Dock from './components/General/Dock'
 import { HomeIcon, Squares2X2Icon, SunIcon } from '@heroicons/react/24/outline'
+import Login from './components/General/Login'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -50,6 +51,7 @@ function App() {
         baseItemSize={40}
         magnification={60}
       />
+      {/* <Login /> */}
     </>
   )
 }
