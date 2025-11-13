@@ -1,10 +1,59 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4002';
+
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
   const toggleAuth = () => setIsLogin(!isLogin);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setMessage('');
+    if (!isLogin && password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    try {
+      setLoading(true);
+      const url = `${API_BASE}/auth/${isLogin ? 'login' : 'signup'}`;
+      const body = isLogin
+        ? { email, password }
+        : { email, password, displayName };
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data?.error || 'Request failed');
+        return;
+      }
+      if (isLogin) {
+        if (data?.idToken) {
+          localStorage.setItem('idToken', data.idToken);
+        }
+        setMessage('Logged in');
+      } else {
+        setMessage('Account created');
+        setIsLogin(true);
+      }
+    } catch (err) {
+      setError(err.message || 'Unexpected error');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-gray-900 p-6">
@@ -25,29 +74,35 @@ const Login = () => {
                 : 'Sign up to stay updated on disaster alerts.'}
             </p>
           </div>
+          {error && (
+            <div className="mb-4 text-red-400 text-sm">{error}</div>
+          )}
+          {message && (
+            <div className="mb-4 text-green-400 text-sm">{message}</div>
+          )}
 
-          <form className="space-y-5">
+          <form className="space-y-5" onSubmit={handleSubmit}>
             {!isLogin && (
               <div>
                 <label className="text-gray-200 text-sm mb-1 block">Full Name</label>
-                <input type="text" placeholder="John Doe" className="w-full p-2 rounded bg-white/10 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input type="text" placeholder="John Doe" value={displayName} onChange={(e) => setDisplayName(e.target.value)} className="w-full p-2 rounded bg-white/10 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
             )}
 
             <div>
               <label className="text-gray-200 text-sm mb-1 block">Email</label>
-              <input type="email" placeholder="example@mail.com" className="w-full p-2 rounded bg-white/10 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input type="email" placeholder="example@mail.com" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-2 rounded bg-white/10 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
 
             <div>
               <label className="text-gray-200 text-sm mb-1 block">Password</label>
-              <input type="password" placeholder="••••••••" className="w-full p-2 rounded bg-white/10 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-2 rounded bg-white/10 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
 
             {!isLogin && (
               <div>
                 <label className="text-gray-200 text-sm mb-1 block">Confirm Password</label>
-                <input type="password" placeholder="••••••••" className="w-full p-2 rounded bg-white/10 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input type="password" placeholder="••••••••" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full p-2 rounded bg-white/10 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
             )}
 
@@ -63,8 +118,8 @@ const Login = () => {
               </div>
             )}
 
-            <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-full py-2 text-lg font-semibold transition-all duration-300">
-              {isLogin ? 'Login' : 'Sign Up'}
+            <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white rounded-full py-2 text-lg font-semibold transition-all duration-300">
+              {loading ? 'Please wait...' : isLogin ? 'Login' : 'Sign Up'}
             </button>
           </form>
 
