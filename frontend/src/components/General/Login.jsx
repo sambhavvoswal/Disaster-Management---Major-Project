@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4002';
 
@@ -12,6 +13,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const toggleAuth = () => setIsLogin(!isLogin);
 
@@ -44,6 +46,7 @@ const Login = () => {
           localStorage.setItem('idToken', data.idToken);
         }
         setMessage('Logged in');
+        navigate('/Home');
       } else {
         setMessage('Account created');
         setIsLogin(true);
