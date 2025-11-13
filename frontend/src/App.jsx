@@ -51,7 +51,7 @@ function App() {
         baseItemSize={40}
         magnification={60}
       />
-      {/* <Login /> */}
+      <Login />
     </>
   )
 }
