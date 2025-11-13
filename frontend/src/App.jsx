@@ -22,8 +22,8 @@ function App() {
     <Header />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Interface />} />
-          <Route path="/Home" element={<Home />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/Home" element={<Interface />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/general-weather" element={<GeneralWeather />} />
         </Routes>
@@ -51,7 +51,6 @@ function App() {
         baseItemSize={40}
         magnification={60}
       />
-      <Login />
     </>
   )
 }

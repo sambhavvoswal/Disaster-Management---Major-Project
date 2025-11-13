@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4002';
 
@@ -12,6 +13,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const toggleAuth = () => setIsLogin(!isLogin);
 
@@ -44,6 +46,7 @@ const Login = () => {
           localStorage.setItem('idToken', data.idToken);
         }
         setMessage('Logged in');
+        navigate('/Home');
       } else {
         setMessage('Account created');
         setIsLogin(true);
@@ -56,7 +59,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-gray-900 p-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-gray-900 p-6 absolute top-0 left-0 right-0 bottom-0">
       <motion.div
         className="w-full max-w-md"
         initial={{ opacity: 0, y: 50 }}
