@@ -5,9 +5,9 @@ const Interface = () => {
   return (
     <div>
       {/* <h1>Welcome to the Disaster Management System</h1> */}
-      <SlidingNews />
+      {/* <SlidingNews /> */}
       {/* <GeneralWeather /> */}
-      <DataCard />
+      
     </div>
   )
 }

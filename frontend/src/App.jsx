@@ -11,9 +11,10 @@ import Header from './components/Home/Header'
 import Footer from './components/Home/Footer'
 import Interface from './components/Newhome/Interface'
 import Dock from './components/General/Dock'
-import { HomeIcon, Squares2X2Icon, SunIcon } from '@heroicons/react/24/outline'
+import { HomeIcon, Squares2X2Icon, SunIcon, MapIcon } from '@heroicons/react/24/outline'
 import Login from './components/General/Login'
 import EventHandler from './components/GDACS/EventHandler'
+import MapPreview from './components/Newhome/MapPreview'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -29,6 +30,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/general-weather" element={<GeneralWeather />} />
           <Route path="/event-handler" element={<EventHandler />} />
+          <Route path="/map-preview" element={<MapPreview />} />
         </Routes>
       </BrowserRouter>
       <Footer />
@@ -53,6 +55,11 @@ function App() {
             icon: <HomeIcon size={18} />,
             label: 'Event Handler',
             onClick: () => (window.location.href = '/event-handler')
+          },
+          {
+            icon: <MapIcon size={18} />,
+            label: 'Weather Map',
+            onClick: () => (window.location.href = '/map-preview')
           },
         ]}
         panelHeight={65}
