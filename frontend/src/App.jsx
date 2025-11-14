@@ -13,6 +13,7 @@ import Interface from './components/Newhome/Interface'
 import Dock from './components/General/Dock'
 import { HomeIcon, Squares2X2Icon, SunIcon } from '@heroicons/react/24/outline'
 import Login from './components/General/Login'
+import EventHandler from './components/GDACS/EventHandler'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -27,6 +28,7 @@ function App() {
           <Route path="/Home" element={<Interface />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/general-weather" element={<GeneralWeather />} />
+          <Route path="/event-handler" element={<EventHandler />} />
         </Routes>
       </BrowserRouter>
       <Footer />
@@ -46,6 +48,11 @@ function App() {
             icon: <SunIcon size={18} />,
             label: 'General Weather',
             onClick: () => (window.location.href = '/general-weather')
+          },
+          {
+            icon: <HomeIcon size={18} />,
+            label: 'Event Handler',
+            onClick: () => (window.location.href = '/event-handler')
           },
         ]}
         panelHeight={65}
