@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { fetchDisasterData } from './DataCollector'
 import DataLog from './DataLog'
 
@@ -7,6 +7,7 @@ const EventHandler = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [disasterEvents, setDisasterEvents] = useState([])
+  const [allEvents, setAllEvents] = useState([])
 
   const disasterTypes = [
     { code: 'EQ', meaning: 'Earthquake' },
@@ -18,20 +19,26 @@ const EventHandler = () => {
   ]
 
   const handleFetchData = async () => {
-    if (!selectedDisaster) {
-      setError('Please select a disaster type')
-      return
-    }
-
     setLoading(true)
     setError('')
     setDisasterEvents([])
 
     try {
-      const data = await fetchDisasterData(selectedDisaster)
-      setDisasterEvents(data)
-      if (data.length === 0) {
-        setError('No active disasters found for the selected type.')
+      if (selectedDisaster) {
+        const data = await fetchDisasterData(selectedDisaster)
+        setDisasterEvents(data)
+        if (data.length === 0) {
+          setError('No active disasters found for the selected type.')
+        }
+      } else {
+        const results = await Promise.all(
+          disasterTypes.map((d) => fetchDisasterData(d.code))
+        )
+        const merged = results.flat()
+        setAllEvents(merged)
+        if (merged.length === 0) {
+          setError('No active disasters found.')
+        }
       }
     } catch (err) {
       setError(err.message || 'Failed to fetch data')
@@ -40,6 +47,37 @@ const EventHandler = () => {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const init = async () => {
+      setLoading(true)
+      setError('')
+      try {
+        const results = await Promise.all(
+          disasterTypes.map((d) => fetchDisasterData(d.code))
+        )
+        setAllEvents(results.flat())
+      } catch (err) {
+        setError(err.message || 'Failed to fetch data')
+      } finally {
+        setLoading(false)
+      }
+    }
+    init()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    const fetchSelected = async () => {
+      if (!selectedDisaster) {
+        setDisasterEvents([])
+        return
+      }
+      await handleFetchData()
+    }
+    fetchSelected()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDisaster])
 
   return (
     <div className="space-y-6">
@@ -79,9 +117,17 @@ const EventHandler = () => {
         )}
       </div>
 
-      {disasterEvents.length > 0 && (
-        <DataLog events={disasterEvents} />
-      )}
+      {(() => {
+        let visibleEvents
+        if (selectedDisaster) {
+          visibleEvents = disasterEvents && disasterEvents.length > 0
+            ? disasterEvents
+            : (allEvents || []).filter((e) => e?.properties?.eventtype === selectedDisaster)
+        } else {
+          visibleEvents = allEvents
+        }
+        return visibleEvents && visibleEvents.length > 0 ? <DataLog events={visibleEvents} /> : null
+      })()}
     </div>
   )
 }

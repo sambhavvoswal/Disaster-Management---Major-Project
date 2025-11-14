@@ -15,10 +15,14 @@ export const fetchDisasterData = async (disasterCode) => {
     
     const data = await response.json()
     
-    // Filter events: keep only those with alertscore 2 or 3
+    // Filter events: keep only those with alertscore 2 or 3 and matching eventtype
     const filteredEvents = filterEventsByAlertScore(data)
+    const byType = (filteredEvents || []).filter((feature) => {
+      const evtType = feature?.properties?.eventtype
+      return !disasterCode || evtType === disasterCode
+    })
     
-    return filteredEvents
+    return byType
   } catch (error) {
     console.error('Error fetching disaster data:', error)
     throw new Error(`Failed to fetch ${disasterCode} data: ${error.message}`)
