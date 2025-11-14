@@ -22,7 +22,8 @@ function App() {
     <Header />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Interface />} />
+          {/* <Route path="/" element={<Login />} /> */}
           <Route path="/Home" element={<Interface />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/general-weather" element={<GeneralWeather />} />

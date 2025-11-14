@@ -6,14 +6,14 @@ return (
         <h1 className='text-lg sm:text-2xl md:text-3xl lg:text-4xl text-yellow-300 font-mono whitespace-nowrap'>
             Disaster Management System
         </h1>
-        <div className='flex gap-2 sm:gap-3 md:gap-4 flex-wrap'>
+        {/* <div className='flex gap-2 sm:gap-3 md:gap-4 flex-wrap'>
             <button className='px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-yellow-300 text-gray-950 rounded font-semibold hover:bg-yellow-400 transition-colors'>
                 Login
             </button>
             <button className='px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base bg-yellow-300 text-gray-950 rounded font-semibold hover:bg-yellow-400 transition-colors'>
                 Sign Up
             </button>
-        </div>
+        </div> */}
     </div>
 )
 }
