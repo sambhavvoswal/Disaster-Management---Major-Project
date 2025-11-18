@@ -107,32 +107,6 @@ const MapPreview = () => {
 
   return (
     <div className="relative w-full h-[80vh] overflow-hidden">
-      {/* Location Permission Popup */}
-      {showPermissionPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-sm shadow-2xl">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">Location Access Required</h2>
-            <p className="text-gray-600 mb-6">
-              We need access to your location to provide accurate weather information for your area.
-            </p>
-            <div className="flex gap-4">
-              <button
-                onClick={handleDenyLocation}
-                className="flex-1 px-4 py-2 bg-gray-300 text-gray-800 font-semibold rounded-lg hover:bg-gray-400 transition"
-              >
-                Deny
-              </button>
-              <button
-                onClick={handleAllowLocation}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
-              >
-                Allow
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Map Header */}
       <div className="absolute top-0 left-0 right-0 bg-gray-900 text-white p-4 z-10 flex justify-between items-center shadow-md">
         <div className="flex items-center space-x-4">

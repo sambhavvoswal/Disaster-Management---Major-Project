@@ -27,8 +27,8 @@ return (
                     </a>
                 </button>
                 <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
-                    <a href='/general-weather' className='text-white'>
-                        General Weather
+                    <a href='/air-quality' className='text-white'>
+                        Air Quality 
                     </a>
                 </button>
                 <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
