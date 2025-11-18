@@ -33,7 +33,7 @@ return (
                 </button>
                 <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
                     <a href='/event-handler' className='text-white'>
-                        Event Handler
+                        Global Monitoring
                     </a>
                 </button>
                 <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
