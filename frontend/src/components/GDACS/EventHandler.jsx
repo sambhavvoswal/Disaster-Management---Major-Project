@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { fetchDisasterData } from './DataCollector'
 import DataLog from './DataLog'
 
 const EventHandler = () => {
   const [selectedDisaster, setSelectedDisaster] = useState('')
+  const [selectedCountry, setSelectedCountry] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [disasterEvents, setDisasterEvents] = useState([])
@@ -48,6 +49,30 @@ const EventHandler = () => {
     }
   }
 
+  const availableCountries = useMemo(() => {
+    const base = selectedDisaster
+      ? (allEvents || []).filter((e) => e?.properties?.eventtype === selectedDisaster)
+      : (allEvents || [])
+    const set = new Set()
+    base.forEach((e) => {
+      const props = e?.properties || {}
+      const c = props.country
+      if (typeof c === 'string') {
+        c.split(',').forEach((s) => s && set.add(s.trim()))
+      } else if (Array.isArray(c)) {
+        c.forEach((s) => s && set.add(String(s).trim()))
+      }
+      const ac = props.affectedcountries
+      if (typeof ac === 'string') {
+        ac.split(',').forEach((s) => s && set.add(s.trim()))
+      } else if (Array.isArray(ac)) {
+        ac.forEach((s) => s && set.add(String(s).trim()))
+      }
+    })
+    const arr = Array.from(set).filter(Boolean).sort()
+    return arr
+  }, [allEvents, selectedDisaster])
+
   useEffect(() => {
     const init = async () => {
       setLoading(true)
@@ -79,6 +104,12 @@ const EventHandler = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDisaster])
 
+  useEffect(() => {
+    if (selectedCountry && !availableCountries.includes(selectedCountry)) {
+      setSelectedCountry('')
+    }
+  }, [availableCountries, selectedCountry])
+
   return (
     <div className="space-y-6">
       <div className="p-6 bg-white rounded-lg shadow-md">
@@ -102,6 +133,22 @@ const EventHandler = () => {
           </select>
         </div>
 
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Select Country
+          </label>
+          <select
+            value={selectedCountry}
+            onChange={(e) => setSelectedCountry(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">-- All Countries --</option>
+            {availableCountries.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+
         <button
           onClick={handleFetchData}
           disabled={loading}
@@ -118,15 +165,21 @@ const EventHandler = () => {
       </div>
 
       {(() => {
-        let visibleEvents
+        let base = allEvents || []
         if (selectedDisaster) {
-          visibleEvents = disasterEvents && disasterEvents.length > 0
-            ? disasterEvents
-            : (allEvents || []).filter((e) => e?.properties?.eventtype === selectedDisaster)
-        } else {
-          visibleEvents = allEvents
+          base = base.filter((e) => e?.properties?.eventtype === selectedDisaster)
         }
-        return visibleEvents && visibleEvents.length > 0 ? <DataLog events={visibleEvents} /> : null
+        if (selectedCountry) {
+          base = base.filter((e) => {
+            const props = e?.properties || {}
+            const c = props.country
+            const ac = props.affectedcountries
+            const matchCountry = (val) => typeof val === 'string' && val.split(',').map((s) => s.trim()).includes(selectedCountry)
+            const matchArray = (arr) => Array.isArray(arr) && arr.map((s) => String(s).trim()).includes(selectedCountry)
+            return matchCountry(c) || matchArray(c) || matchCountry(ac) || matchArray(ac)
+          })
+        }
+        return base && base.length > 0 ? <DataLog events={base} /> : null
       })()}
     </div>
   )
