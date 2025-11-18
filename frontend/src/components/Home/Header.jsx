@@ -21,11 +21,11 @@ return (
                         Home
                     </a>
                 </button>
-                <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
+                {/* <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
                     <a href='/dashboard' className='text-white'>
                         Dashboard
                     </a>
-                </button>
+                </button> */}
                 <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
                     <a href='/air-quality' className='text-white'>
                         Air Quality 
@@ -38,7 +38,7 @@ return (
                 </button>
                 <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
                     <a href='/map-preview' className='text-white'>
-                        Weather Map
+                        General Weather
                     </a>
                 </button>
             </div>
