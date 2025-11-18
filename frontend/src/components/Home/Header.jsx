@@ -14,7 +14,37 @@ return (
                 Sign Up
             </button>
         </div> */}
+        <nav className='bg-gray-800 w-full px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-5 flex justify-between items-center'>
+            <div className='flex gap-4'>
+                <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
+                    <a href='/' className='text-white'>
+                        Home
+                    </a>
+                </button>
+                <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
+                    <a href='/dashboard' className='text-white'>
+                        Dashboard
+                    </a>
+                </button>
+                <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
+                    <a href='/general-weather' className='text-white'>
+                        General Weather
+                    </a>
+                </button>
+                <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
+                    <a href='/event-handler' className='text-white'>
+                        Event Handler
+                    </a>
+                </button>
+                <button className='px-3 sm:px-4 py-1.5 sm:py-1.75 text-sm sm:text-base bg-gray-800 text-gray-300 rounded font-semibold hover:bg-gray-700 transition-colors'>
+                    <a href='/map-preview' className='text-white'>
+                        Weather Map
+                    </a>
+                </button>
+            </div>
+        </nav>
     </div>
+    
 )
 }
 

@@ -106,7 +106,7 @@ const MapPreview = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-[80vh] overflow-hidden">
       {/* Location Permission Popup */}
       {showPermissionPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

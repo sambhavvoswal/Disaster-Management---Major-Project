@@ -22,7 +22,7 @@ function App() {
   return (
     <>
     <Header />
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           <Route path="/" element={<Interface />} />
           {/* <Route path="/" element={<Login />} /> */}
@@ -34,38 +34,6 @@ function App() {
         </Routes>
       </BrowserRouter>
       <Footer />
-      <Dock 
-        items={[
-          {
-            icon: <HomeIcon size={18} />,
-            label: 'Home',
-            onClick: () => (window.location.href = '/')
-          },
-          {
-            icon: <Squares2X2Icon size={18} />,
-            label: 'Dashboard',
-            onClick: () => (window.location.href = '/dashboard')
-          },
-          {
-            icon: <SunIcon size={18} />,
-            label: 'General Weather',
-            onClick: () => (window.location.href = '/general-weather')
-          },
-          {
-            icon: <HomeIcon size={18} />,
-            label: 'Event Handler',
-            onClick: () => (window.location.href = '/event-handler')
-          },
-          {
-            icon: <MapIcon size={18} />,
-            label: 'Weather Map',
-            onClick: () => (window.location.href = '/map-preview')
-          },
-        ]}
-        panelHeight={65}
-        baseItemSize={40}
-        magnification={60}
-      />
     </>
   )
 }
