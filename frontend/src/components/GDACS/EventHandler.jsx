@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { fetchDisasterData } from './DataCollector'
 import DataLog from './DataLog'
 
 const EventHandler = () => {
   const [selectedDisaster, setSelectedDisaster] = useState('')
+  const [selectedCountry, setSelectedCountry] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [disasterEvents, setDisasterEvents] = useState([])
+  const [allEvents, setAllEvents] = useState([])
 
   const disasterTypes = [
     { code: 'EQ', meaning: 'Earthquake' },
@@ -18,20 +20,26 @@ const EventHandler = () => {
   ]
 
   const handleFetchData = async () => {
-    if (!selectedDisaster) {
-      setError('Please select a disaster type')
-      return
-    }
-
     setLoading(true)
     setError('')
     setDisasterEvents([])
 
     try {
-      const data = await fetchDisasterData(selectedDisaster)
-      setDisasterEvents(data)
-      if (data.length === 0) {
-        setError('No active disasters found for the selected type.')
+      if (selectedDisaster) {
+        const data = await fetchDisasterData(selectedDisaster)
+        setDisasterEvents(data)
+        if (data.length === 0) {
+          setError('No active disasters found for the selected type.')
+        }
+      } else {
+        const results = await Promise.all(
+          disasterTypes.map((d) => fetchDisasterData(d.code))
+        )
+        const merged = results.flat()
+        setAllEvents(merged)
+        if (merged.length === 0) {
+          setError('No active disasters found.')
+        }
       }
     } catch (err) {
       setError(err.message || 'Failed to fetch data')
@@ -40,6 +48,67 @@ const EventHandler = () => {
       setLoading(false)
     }
   }
+
+  const availableCountries = useMemo(() => {
+    const base = selectedDisaster
+      ? (allEvents || []).filter((e) => e?.properties?.eventtype === selectedDisaster)
+      : (allEvents || [])
+    const set = new Set()
+    base.forEach((e) => {
+      const props = e?.properties || {}
+      const c = props.country
+      if (typeof c === 'string') {
+        c.split(',').forEach((s) => s && set.add(s.trim()))
+      } else if (Array.isArray(c)) {
+        c.forEach((s) => s && set.add(String(s).trim()))
+      }
+      const ac = props.affectedcountries
+      if (typeof ac === 'string') {
+        ac.split(',').forEach((s) => s && set.add(s.trim()))
+      } else if (Array.isArray(ac)) {
+        ac.forEach((s) => s && set.add(String(s).trim()))
+      }
+    })
+    const arr = Array.from(set).filter(Boolean).sort()
+    return arr
+  }, [allEvents, selectedDisaster])
+
+  useEffect(() => {
+    const init = async () => {
+      setLoading(true)
+      setError('')
+      try {
+        const results = await Promise.all(
+          disasterTypes.map((d) => fetchDisasterData(d.code))
+        )
+        setAllEvents(results.flat())
+      } catch (err) {
+        setError(err.message || 'Failed to fetch data')
+      } finally {
+        setLoading(false)
+      }
+    }
+    init()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    const fetchSelected = async () => {
+      if (!selectedDisaster) {
+        setDisasterEvents([])
+        return
+      }
+      await handleFetchData()
+    }
+    fetchSelected()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDisaster])
+
+  useEffect(() => {
+    if (selectedCountry && !availableCountries.includes(selectedCountry)) {
+      setSelectedCountry('')
+    }
+  }, [availableCountries, selectedCountry])
 
   return (
     <div className="space-y-6">
@@ -64,6 +133,22 @@ const EventHandler = () => {
           </select>
         </div>
 
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Select Country
+          </label>
+          <select
+            value={selectedCountry}
+            onChange={(e) => setSelectedCountry(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">-- All Countries --</option>
+            {availableCountries.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+
         <button
           onClick={handleFetchData}
           disabled={loading}
@@ -79,9 +164,23 @@ const EventHandler = () => {
         )}
       </div>
 
-      {disasterEvents.length > 0 && (
-        <DataLog events={disasterEvents} />
-      )}
+      {(() => {
+        let base = allEvents || []
+        if (selectedDisaster) {
+          base = base.filter((e) => e?.properties?.eventtype === selectedDisaster)
+        }
+        if (selectedCountry) {
+          base = base.filter((e) => {
+            const props = e?.properties || {}
+            const c = props.country
+            const ac = props.affectedcountries
+            const matchCountry = (val) => typeof val === 'string' && val.split(',').map((s) => s.trim()).includes(selectedCountry)
+            const matchArray = (arr) => Array.isArray(arr) && arr.map((s) => String(s).trim()).includes(selectedCountry)
+            return matchCountry(c) || matchArray(c) || matchCountry(ac) || matchArray(ac)
+          })
+        }
+        return base && base.length > 0 ? <DataLog events={base} /> : null
+      })()}
     </div>
   )
 }
