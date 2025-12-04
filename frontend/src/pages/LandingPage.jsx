@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { fetchEarthquakes, fetchGDACSEvents, fetchCyclones } from "../utils/disasterApi";
 import NearbyAlerts from '../components/maps/NearbyAlerts';
+import DisasterDashboard from '../components/dashboard/DisasterDashboardSection';
+
 // Change this line in LandingPage.jsx
 import { getCurrentPosition } from '../utils/geolocation';
 import {

@@ -15,7 +15,7 @@ import Login from './components/General/Login'
 import EventHandler from './components/GDACS/EventHandler'
 import MapPreview from './components/Newhome/MapPreview'
 import LandingPage from './pages/LandingPage'
-
+import DisasterDashboardPage from './pages/DisasterDashboardPage';
 function App() {
   const [count, setCount] = useState(0)
 
@@ -27,11 +27,11 @@ function App() {
           {/* <Route path="/" element={<Interface />} /> */}
           <Route path="/" element={<Login />} />
           <Route path="/Home" element={<Interface />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/air-quality" element={<GeneralWeather />} />
           <Route path="/event-handler" element={<EventHandler />} />
           <Route path="/map-preview" element={<MapPreview />} />
           <Route path="/landing" element={<LandingPage />} />
+          <Route path="/dashboard" element={<DisasterDashboardPage />} />
         </Routes>
       </BrowserRouter>
       <Footer />

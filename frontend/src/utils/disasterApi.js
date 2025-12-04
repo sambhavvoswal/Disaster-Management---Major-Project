@@ -152,7 +152,7 @@ export const fetchGDACSEvents = async () => {
     return []; // Return empty array on error
   }
 };
-
+export * from './disasterApi';
 export const fetchCyclones = async () => {
   try {
     // Using alternative data source for cyclones from NHC
