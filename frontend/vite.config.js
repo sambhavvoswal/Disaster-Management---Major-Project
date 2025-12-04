@@ -12,4 +12,13 @@ export default defineConfig({
       'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
     },
   },
+  server: {
+    proxy: {
+      '/gdacs-api': {
+        target: 'https://www.gdacs.org',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 })

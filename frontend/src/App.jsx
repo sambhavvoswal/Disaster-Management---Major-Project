@@ -14,6 +14,7 @@ import Dock from './components/General/Dock'
 import Login from './components/General/Login'
 import EventHandler from './components/GDACS/EventHandler'
 import MapPreview from './components/Newhome/MapPreview'
+import LandingPage from './pages/LandingPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -30,6 +31,7 @@ function App() {
           <Route path="/air-quality" element={<GeneralWeather />} />
           <Route path="/event-handler" element={<EventHandler />} />
           <Route path="/map-preview" element={<MapPreview />} />
+          <Route path="/landing" element={<LandingPage />} />
         </Routes>
       </BrowserRouter>
       <Footer />

@@ -7,7 +7,6 @@ const EventHandler = () => {
   const [selectedCountry, setSelectedCountry] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [disasterEvents, setDisasterEvents] = useState([])
   const [allEvents, setAllEvents] = useState([])
 
   const disasterTypes = [
@@ -22,28 +21,27 @@ const EventHandler = () => {
   const handleFetchData = async () => {
     setLoading(true)
     setError('')
-    setDisasterEvents([])
-
     try {
-      if (selectedDisaster) {
-        const data = await fetchDisasterData(selectedDisaster)
-        setDisasterEvents(data)
-        if (data.length === 0) {
-          setError('No active disasters found for the selected type.')
-        }
-      } else {
-        const results = await Promise.all(
-          disasterTypes.map((d) => fetchDisasterData(d.code))
+      const typesToFetch = selectedDisaster
+        ? disasterTypes.filter((d) => d.code === selectedDisaster)
+        : disasterTypes
+
+      const results = await Promise.all(
+        typesToFetch.map((d) => fetchDisasterData(d.code))
+      )
+
+      const merged = results.flat()
+      setAllEvents(merged)
+
+      if (merged.length === 0) {
+        setError(
+          selectedDisaster
+            ? 'No active disasters found for the selected type.'
+            : 'No active disasters found.'
         )
-        const merged = results.flat()
-        setAllEvents(merged)
-        if (merged.length === 0) {
-          setError('No active disasters found.')
-        }
       }
     } catch (err) {
       setError(err.message || 'Failed to fetch data')
-      setDisasterEvents([])
     } finally {
       setLoading(false)
     }
@@ -73,6 +71,46 @@ const EventHandler = () => {
     return arr
   }, [allEvents, selectedDisaster])
 
+  const filteredEvents = useMemo(() => {
+    let base = allEvents || []
+
+    if (selectedDisaster) {
+      base = base.filter(
+        (e) => e?.properties?.eventtype === selectedDisaster
+      )
+    }
+
+    if (selectedCountry) {
+      base = base.filter((e) => {
+        const props = e?.properties || {}
+        const c = props.country
+        const ac = props.affectedcountries
+
+        const matchCountry = (val) =>
+          typeof val === 'string' &&
+          val
+            .split(',')
+            .map((s) => s.trim())
+            .includes(selectedCountry)
+
+        const matchArray = (arr) =>
+          Array.isArray(arr) &&
+          arr
+            .map((s) => String(s).trim())
+            .includes(selectedCountry)
+
+        return (
+          matchCountry(c) ||
+          matchArray(c) ||
+          matchCountry(ac) ||
+          matchArray(ac)
+        )
+      })
+    }
+
+    return base
+  }, [allEvents, selectedDisaster, selectedCountry])
+
   useEffect(() => {
     const init = async () => {
       setLoading(true)
@@ -91,18 +129,6 @@ const EventHandler = () => {
     init()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => {
-    const fetchSelected = async () => {
-      if (!selectedDisaster) {
-        setDisasterEvents([])
-        return
-      }
-      await handleFetchData()
-    }
-    fetchSelected()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDisaster])
 
   useEffect(() => {
     if (selectedCountry && !availableCountries.includes(selectedCountry)) {
@@ -164,23 +190,7 @@ const EventHandler = () => {
         )}
       </div>
 
-      {(() => {
-        let base = allEvents || []
-        if (selectedDisaster) {
-          base = base.filter((e) => e?.properties?.eventtype === selectedDisaster)
-        }
-        if (selectedCountry) {
-          base = base.filter((e) => {
-            const props = e?.properties || {}
-            const c = props.country
-            const ac = props.affectedcountries
-            const matchCountry = (val) => typeof val === 'string' && val.split(',').map((s) => s.trim()).includes(selectedCountry)
-            const matchArray = (arr) => Array.isArray(arr) && arr.map((s) => String(s).trim()).includes(selectedCountry)
-            return matchCountry(c) || matchArray(c) || matchCountry(ac) || matchArray(ac)
-          })
-        }
-        return base && base.length > 0 ? <DataLog events={base} /> : null
-      })()}
+      <DataLog events={filteredEvents} />
     </div>
   )
 }
