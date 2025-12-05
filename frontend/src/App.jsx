@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import React, { useEffect } from 'react';  // Add useEffect to the React import
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -14,9 +15,15 @@ import Dock from './components/General/Dock'
 import Login from './components/General/Login'
 import EventHandler from './components/GDACS/EventHandler'
 import MapPreview from './components/Newhome/MapPreview'
-
+import LandingPage from './pages/LandingPage'
+import DisasterDashboardPage from './pages/DisasterDashboardPage';
+import { notificationService } from './services/notificationService';
 function App() {
   const [count, setCount] = useState(0)
+    useEffect(() => {
+    // Initialize notification service
+    notificationService.initialize();
+  }, []);
 
   return (
     <>
@@ -24,12 +31,14 @@ function App() {
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           {/* <Route path="/" element={<Interface />} /> */}
-          <Route path="/" element={<Login />} />
-          <Route path="/Home" element={<Interface />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/air-quality" element={<GeneralWeather />} />
+          {/* <Route path="/" element={<Login />} /> */}
+          <Route path="/Home" element={<LandingPage />} />
+          {/* <Route path="/Home" element={<Interface />} /> */}
+          {/* <Route path="/air-quality" element={<GeneralWeather />} /> */}
           <Route path="/event-handler" element={<EventHandler />} />
           <Route path="/map-preview" element={<MapPreview />} />
+          {/* <Route path="/landing" element={<LandingPage />} /> */}
+          <Route path="/dashboard" element={<DisasterDashboardPage />} />
         </Routes>
       </BrowserRouter>
       <Footer />

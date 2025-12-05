@@ -5,14 +5,14 @@
  */
 export const fetchDisasterData = async (disasterCode) => {
   try {
-    const apiUrl = `https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventtype=${disasterCode}`
+    const apiUrl = `http://localhost:4001/api/gdacs?eventtype=${disasterCode}`
     
     const response = await fetch(apiUrl)
     
     if (!response.ok) {
       throw new Error(`API Error: ${response.status} ${response.statusText}`)
     }
-    
+
     const data = await response.json()
     
     // Filter events: keep only those with alertscore 2 or 3 and matching eventtype
@@ -39,10 +39,9 @@ const filterEventsByAlertScore = (data) => {
     return []
   }
   
-  return data.features.filter((feature) => {
-    const alertScore = feature.properties?.alertscore
-    return alertScore === 2 || alertScore === 3
-  })
+  // Return all features so the UI can display every event the API considers active.
+  // Further filtering (by type, country, etc.) is handled in the UI layer.
+  return data.features
 }
 
 /**

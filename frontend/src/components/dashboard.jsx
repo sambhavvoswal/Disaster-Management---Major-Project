@@ -11,6 +11,10 @@ function Dashboard() {
     navigate('/general-weather');
   };
 
+  const handleLandingClick = () => {
+    navigate('/landing');
+  };
+
   const [selectedMap, setSelectedMap] = React.useState(null);
 
   // Handler for button clicks
@@ -27,7 +31,7 @@ return (
             </div>
         </div>
         <>
-            <div className='body bg-gray-200 h-full w-full gap-2 flex items-center justify-center'>
+            <div className='body bg-gray-200 h-full w-full gap-2 flex items-center justify-center flex-wrap'>
                 <button
                     type="button"
                     className={`bg-blue-500 text-white p-2 rounded-md m-2 text-2xl hover:bg-blue-700`}
@@ -48,6 +52,13 @@ return (
                     onClick={() => handleMapClick('Map3')}
                 >
                     Map3
+                </button>
+                <button
+                    type="button"
+                    className={`bg-green-500 text-white p-2 rounded-md m-2 text-xl hover:bg-green-600`}
+                    onClick={handleLandingClick}
+                >
+                    Global Overview
                 </button>
             </div>
             <div className="flex justify-center items-center mt-8">
