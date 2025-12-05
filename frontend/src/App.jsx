@@ -31,12 +31,13 @@ function App() {
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           {/* <Route path="/" element={<Interface />} /> */}
-          <Route path="/" element={<Login />} />
-          <Route path="/Home" element={<Interface />} />
-          <Route path="/air-quality" element={<GeneralWeather />} />
+          {/* <Route path="/" element={<Login />} /> */}
+          <Route path="/Home" element={<LandingPage />} />
+          {/* <Route path="/Home" element={<Interface />} /> */}
+          {/* <Route path="/air-quality" element={<GeneralWeather />} /> */}
           <Route path="/event-handler" element={<EventHandler />} />
           <Route path="/map-preview" element={<MapPreview />} />
-          <Route path="/landing" element={<LandingPage />} />
+          {/* <Route path="/landing" element={<LandingPage />} /> */}
           <Route path="/dashboard" element={<DisasterDashboardPage />} />
         </Routes>
       </BrowserRouter>
