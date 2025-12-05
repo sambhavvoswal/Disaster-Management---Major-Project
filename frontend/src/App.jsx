@@ -18,6 +18,7 @@ import MapPreview from './components/Newhome/MapPreview'
 import LandingPage from './pages/LandingPage'
 import DisasterDashboardPage from './pages/DisasterDashboardPage';
 import { notificationService } from './services/notificationService';
+import PredictionPage from './pages/PredictionPage'
 function App() {
   const [count, setCount] = useState(0)
     useEffect(() => {
@@ -39,6 +40,7 @@ function App() {
           <Route path="/map-preview" element={<MapPreview />} />
           {/* <Route path="/landing" element={<LandingPage />} /> */}
           <Route path="/dashboard" element={<DisasterDashboardPage />} />
+          <Route path="/prediction" element={<PredictionPage />} />
         </Routes>
       </BrowserRouter>
       <Footer />
