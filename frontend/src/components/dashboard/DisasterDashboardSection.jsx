@@ -29,8 +29,42 @@ const DisasterDashboardSection = ({ disasters, userLocation }) => {
       depth: '10 km',
       status: 'active'
     },
-    // Add more mock alerts as needed
+    {
+      id: 2,
+      type: 'flood',
+      name: 'Flood - Mumbai',
+      severity: 'high',
+      distance: 120,
+      time: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
+      location: '19.0760° N, 72.8777° E',
+      affectedAreas: 5,
+      status: 'active'
+    },
+    {
+      id: 3,
+      type: 'wildfire',
+      name: 'Wildfire - Uttarakhand',
+      severity: 'extreme',
+      distance: 250,
+      time: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+      location: '30.0668° N, 79.0193° E',
+      areaAffected: '500 acres',
+      status: 'ongoing'
+    }
   ];
+
+  // Alert distribution by disaster type - Commented out as per request
+  /*
+  const alertDistribution = [
+    { type: 'Earthquake', count: 8, color: 'from-orange-500 to-orange-600' },
+    { type: 'Flood', count: 5, color: 'from-blue-500 to-blue-600' },
+    { type: 'Wildfire', count: 3, color: 'from-red-500 to-red-600' },
+    { type: 'Cyclone', count: 2, color: 'from-purple-500 to-purple-600' },
+    { type: 'Landslide', count: 1, color: 'from-yellow-500 to-yellow-600' }
+  ];
+
+  const totalAlerts = alertDistribution.reduce((sum, item) => sum + item.count, 0);
+  */
 
   const trendData = {
     currentMonth: 24,
@@ -194,31 +228,73 @@ const DisasterDashboardSection = ({ disasters, userLocation }) => {
             </div>
           </div>
 
+          {/* Alert Distribution Section - Commented out as per request
           <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5">
             <h3 className="text-slate-400 text-sm font-medium mb-3">
-              Alert Distribution
+              Alert Distribution by Disaster Type
             </h3>
-            <div className="h-32 flex items-end gap-1">
-              {Array(7).fill(0).map((_, i) => {
-                const value = Math.floor(Math.random() * 10) + 1;
+            <div className="space-y-2">
+              {alertDistribution.map((item, index) => {
+                const percentage = Math.round((item.count / totalAlerts) * 100);
                 return (
-                  <div key={i} className="flex-1 flex flex-col items-center">
-                    <div 
-                      className="w-full bg-gradient-to-t from-blue-500 to-blue-600 rounded-t-sm"
-                      style={{ height: `${(value / 10) * 100}%` }}
-                    />
-                    <span className="text-xs text-slate-500 mt-1">
-                      {['S', 'M', 'T', 'W', 'T', 'F', 'S'][i]}
-                    </span>
+                  <div key={index} className="space-y-1">
+                    <div className="flex justify-between text-xs text-slate-300">
+                      <span>{item.type}</span>
+                      <span>{item.count} ({percentage}%)</span>
+                    </div>
+                    <div className="w-full bg-slate-700/50 rounded-full h-2">
+                      <div 
+                        className={`h-full rounded-full bg-gradient-to-r ${item.color}`}
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
                   </div>
                 );
               })}
             </div>
+            <div className="mt-3 pt-3 border-t border-slate-700 text-xs text-slate-400">
+              Total Alerts: {totalAlerts}
+            </div>
           </div>
+          */}
+
+          {/* Timeline View Section - Commented out as per request
+          <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5">
+            <h3 className="text-slate-400 text-sm font-medium mb-3">
+              Timeline View
+            </h3>
+            <div className="relative h-64 bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
+              <div className="absolute bottom-0 left-0 right-0 h-px bg-slate-700" />
+              <div className="absolute bottom-0 left-0 right-0 flex justify-between h-full items-end">
+                {Array(timeRange === 'week' ? 7 : 30).fill(0).map((_, i) => {
+                  const count = Math.floor(Math.random() * 5);
+                  const height = (count / 5) * 100;
+                  
+                  return (
+                    <div key={i} className="flex-1 flex flex-col items-center">
+                      <div 
+                        className={`w-full rounded-t-sm ${
+                          count > 3 ? 'bg-red-500' : 
+                          count > 1 ? 'bg-yellow-500' : 'bg-green-500'
+                        }`}
+                        style={{ height: `${height}%` }}
+                      />
+                      <span className="text-xs text-slate-500 mt-1">
+                        {timeRange === 'week' 
+                          ? ['S', 'M', 'T', 'W', 'T', 'F', 'S'][i]
+                          : i % 5 === 0 ? i + 1 : ''}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+          */}
         </div>
       </section>
 
-      {/* Timeline View Section */}
+      {/* Timeline View Section - Commented out as per request
       <section>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
@@ -272,6 +348,7 @@ const DisasterDashboardSection = ({ disasters, userLocation }) => {
           </div>
         </div>
       </section>
+      */}
     </div>
   );
 };

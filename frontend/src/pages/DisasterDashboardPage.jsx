@@ -376,7 +376,8 @@ const DisasterDashboardPage = () => {
               </div>
             </div>
 
-            <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5">
+            {/* Alert Distribution Section - Commented out as requested */}
+            {/* <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5">
               <h3 className="text-slate-400 text-sm font-medium mb-3">
                 Alert Distribution (7 days)
               </h3>
@@ -394,6 +395,7 @@ const DisasterDashboardPage = () => {
                     });
                     
                     const dayCount = dayDisasters.length;
+                    
                     const maxCount = Math.max(1, ...Array(7).fill(0).map((_, j) => {
                       const day = new Date();
                       day.setHours(0, 0, 0, 0);
@@ -408,14 +410,12 @@ const DisasterDashboardPage = () => {
                     const height = dayCount > 0 ? (dayCount / maxCount) * 100 : 5;
                     const hasAlerts = dayCount > 0;
                     
-                    // Calculate severity for the day based on GDACS alert levels
                     const severity = dayDisasters.reduce((maxSev, disaster) => {
                       const sev = disaster.alertlevel || 'green';
                       const sevOrder = { 'red': 3, 'orange': 2, 'green': 1 };
                       return sevOrder[sev] > (sevOrder[maxSev] || 0) ? sev : maxSev;
                     }, '');
                     
-                    // Map GDACS alert levels to colors
                     const getSeverityColor = (sev) => {
                       switch(sev) {
                         case 'red': return 'bg-red-500';
@@ -469,12 +469,12 @@ const DisasterDashboardPage = () => {
                 </div>
                 <span>Today</span>
               </div>
-            </div>
+            </div> */}
           </div>
         </section>
 
-        {/* Timeline View Section */}
-        <section>
+        {/* Timeline View Section - Commented out as requested */}
+        {/* <section>
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
               <FiClock className="text-blue-500" />
@@ -509,7 +509,6 @@ const DisasterDashboardPage = () => {
                     date.setHours(0, 0, 0, 0);
                     date.setDate(date.getDate() - ((timeRange === 'week' ? 6 : 29) - i));
                     
-                    // Filter disasters for this specific day
                     const dayDisasters = recentDisasters.filter(disaster => {
                       const disasterDate = new Date(disaster.date);
                       disasterDate.setHours(0, 0, 0, 0);
@@ -518,7 +517,6 @@ const DisasterDashboardPage = () => {
                     
                     const count = dayDisasters.length;
                     
-                    // Calculate maximum count for scaling
                     const maxCount = Math.max(1, ...Array(timeRange === 'week' ? 7 : 30).fill(0).map((_, j) => {
                       const day = new Date();
                       day.setHours(0, 0, 0, 0);
@@ -530,18 +528,15 @@ const DisasterDashboardPage = () => {
                       }).length;
                     }));
                     
-                    // Calculate height and ensure minimum height for visibility
                     const height = count > 0 ? Math.max(10, (count / maxCount) * 100) : 5;
                     const hasAlerts = count > 0;
                     
-                    // Determine the highest severity for the day
                     const severity = dayDisasters.reduce((maxSev, disaster) => {
                       const sev = disaster.alertlevel || getSeverityColor(disaster);
                       const sevOrder = { 'red': 3, 'orange': 2, 'yellow': 2, 'green': 1 };
                       return sevOrder[sev] > (sevOrder[maxSev] || 0) ? sev : maxSev;
                     }, '');
                     
-                    // Map severity to Tailwind classes
                     const getSeverityClass = (sev) => {
                       switch(sev) {
                         case 'red': return 'bg-red-500';
@@ -552,7 +547,6 @@ const DisasterDashboardPage = () => {
                       }
                     };
                     
-                    // Generate tooltip content
                     const tooltipContent = hasAlerts 
                       ? `${count} alert${count !== 1 ? 's' : ''} on ${date.toLocaleDateString()}\n` +
                         `Highest severity: ${severity || 'unknown'}\n` +
@@ -606,7 +600,7 @@ const DisasterDashboardPage = () => {
               </div>
             )}
           </div>
-        </section>
+        </section> */}
       </div>
     </div>
   );

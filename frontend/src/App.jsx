@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import React, { useEffect } from 'react';  // Add useEffect to the React import
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -16,8 +17,13 @@ import EventHandler from './components/GDACS/EventHandler'
 import MapPreview from './components/Newhome/MapPreview'
 import LandingPage from './pages/LandingPage'
 import DisasterDashboardPage from './pages/DisasterDashboardPage';
+import { notificationService } from './services/notificationService';
 function App() {
   const [count, setCount] = useState(0)
+    useEffect(() => {
+    // Initialize notification service
+    notificationService.initialize();
+  }, []);
 
   return (
     <>
