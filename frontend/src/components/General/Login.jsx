@@ -111,13 +111,13 @@ const Login = () => {
 
             {isLogin && (
               <div className="flex justify-between items-center text-sm text-gray-300">
-                <label className="flex items-center space-x-2">
+                {/* <label className="flex items-center space-x-2">
                   <input type="checkbox" className="accent-blue-600" />
                   <span>Remember Me</span>
-                </label>
-                <button type="button" className="text-blue-400 hover:underline">
+                </label> */}
+                {/* <button type="button" className="text-blue-400 hover:underline">
                   Forgot Password?
-                </button>
+                </button> */}
               </div>
             )}
 
